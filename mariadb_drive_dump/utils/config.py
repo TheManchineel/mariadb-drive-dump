@@ -21,6 +21,8 @@ else:
 
 crontab = config["Backup"]["crontab"]
 
+retention_days = int(config["Backup"]["retention_days"])
+
 mysql_user = config["MySQL"]["user"]
 mysql_password = config["MySQL"]["password"]
 mysql_host = config["MySQL"]["host"]
