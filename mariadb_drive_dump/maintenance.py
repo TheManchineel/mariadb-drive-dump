@@ -3,9 +3,9 @@ from datetime import datetime, timedelta
 from pytz import UTC
 from dateutil import parser
 
-from utils.google_drive import list_directory
-from utils.config import target_directory_id, retention_days
-from utils.utils import get_logger
+from .google_drive import list_directory
+from .config import target_directory_id, retention_days
+from .utils import get_logger
 
 
 def time_of_last_backup() -> datetime:

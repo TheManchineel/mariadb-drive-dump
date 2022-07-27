@@ -1,9 +1,7 @@
 from pathlib import Path
 from configparser import ConfigParser
 
-module_path = Path(__file__).parents[1].absolute()
-
-config_dir_path = module_path.parent / "config"
+config_dir_path = Path("config")
 
 credentials_path = config_dir_path / "credentials.json"
 config_path = config_dir_path / "config.ini"
