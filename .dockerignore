@@ -264,3 +264,7 @@ $RECYCLE.BIN/
 # Configuration files
 /config/config.ini
 /config/credentials.json
+
+# Additional stuff
+Dockerfile
+/.github/
