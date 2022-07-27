@@ -1,3 +1,11 @@
+from utils.utils import check_and_fix_config, get_logger
+
+if check_and_fix_config():
+    logger = get_logger(__name__)
+    logger.warning("Config file not found, created a new one in /config")
+    logger.warning("Please edit the config file and restart the program")
+    exit(1)
+
 from pycron import has_been
 from datetime import datetime, timedelta
 from time import sleep
@@ -6,13 +14,9 @@ from signal import signal, SIGINT, SIGTERM
 from utils.job import DumpJob
 from utils.config import crontab
 from utils.maintenance import time_of_last_backup, spring_clean
-from utils.utils import get_logger
 
 
-def launch_job():
-    global job
-    job = DumpJob()
-    job.thread.join()
+job: DumpJob = None
 
 
 def on_signal(signal_number, frame):
@@ -33,20 +37,30 @@ def on_signal(signal_number, frame):
 signal(SIGINT, on_signal)
 signal(SIGTERM, on_signal)
 
-job: DumpJob = None
-last_backup_time: datetime = time_of_last_backup()
 
 ONE_MINUTE = timedelta(minutes=1)
 
-while True:
-    if has_been(crontab, last_backup_time):
-        last_backup_time = datetime.now()
-        launch_job()
-        spring_clean()
-    else:
-        now = datetime.now()
-        seconds_until_next_minute = (
-            (now + ONE_MINUTE).replace(microsecond=0, second=1) - now
-        ).seconds
-        sleep(seconds_until_next_minute)
-        continue
+
+def launch_job():
+    global job
+    job = DumpJob()
+    job.thread.join()
+
+
+def main():
+    last_backup_time: datetime = time_of_last_backup()
+    while True:
+        if has_been(crontab, last_backup_time):
+            last_backup_time = datetime.now()
+            launch_job()
+            spring_clean()
+        else:
+            now = datetime.now()
+            seconds_until_next_minute = (
+                (now + ONE_MINUTE).replace(microsecond=0, second=1) - now
+            ).seconds
+            sleep(seconds_until_next_minute)
+            continue
+
+
+main()
