@@ -36,11 +36,9 @@ def human_readable_size(size: int | float, decimal_places: int = 2) -> str:
 
 
 def check_and_fix_config() -> bool:
-    config_path = Path(__file__).parents[1] / "config" / "config.ini"
+    config_path = Path("config") / "config.ini"
     if not config_path.exists():
-        config_example_path = (
-            Path(__file__).parents[1] / "config_example" / "config.ini"
-        )
+        config_example_path = Path(__file__).parent / "config" / "config.ini"
         makedirs(config_path.parent, exist_ok=True)
         copy(config_example_path, config_path)
         return True
