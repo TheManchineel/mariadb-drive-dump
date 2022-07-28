@@ -20,7 +20,6 @@ mysqldump_arguments = [
     mysql_host,
     "-P",
     mysql_port,
-    "--column-statistics=0",
     "--single-transaction",
 ]
 
