@@ -20,10 +20,12 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - name: Get current date
+        echo "NOW::$(date '+%Y-%m-%dT%H_%M_%SZ')" >> $GITHUB_ENV
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag manchineel/mariadb_drive_dump:$(date +%s)
+      run: docker build . --file Dockerfile --tag manchineel/mariadb_drive_dump:${NOW}
     - name: Push to Docker Hub registry
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
       run: |
-        docker push ${DOCKER_USER}/mariadb_drive_dump
+        docker push ${DOCKER_USER}/mariadb_drive_dump:${NOW}
