@@ -24,5 +24,6 @@ FROM base as final
 
 COPY --from=builder /app/dist /app/dist
 
+ENV MARIADB_DRIVE_DUMP_CONFIG_DIR=/config/
 RUN pip install /app/dist/*.whl
 CMD ["python", "-m", "mariadb_drive_dump"]
