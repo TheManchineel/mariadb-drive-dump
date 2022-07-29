@@ -24,9 +24,9 @@ jobs:
       run: |
         echo "NOW=$(date '+%Y-%m-%dT%H_%M_%SZ')" >> $GITHUB_ENV
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag manchineel/mariadb_drive_dump:${NOW}
+      run: docker build . --file Dockerfile --tag manchineel/mariadb_drive_dump:${NOW} --tag manchineel/mariadb_drive_dump:latest
     - name: Push to Docker Hub registry
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
       run: |
-        docker push ${DOCKER_USER}/mariadb_drive_dump:${NOW}
+        docker push ${DOCKER_USER}/mariadb_drive_dump:${NOW} --all-tags
