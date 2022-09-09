@@ -27,7 +27,7 @@ def spring_clean() -> int:
         if parser.parse(file.metadata["createdDate"]) < (
             UTC.localize(datetime.now() - timedelta(days=retention_days))
         ):
-            get_logger().info(f"Deleting old file \"{file.metadata['title']}\"")
+            get_logger(__name__).info(f"Deleting old file \"{file.metadata['title']}\"")
             delete_file(file)
             deleted_count += 1
 
