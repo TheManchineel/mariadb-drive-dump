@@ -1,7 +1,11 @@
 from pathlib import Path
 from configparser import ConfigParser
+from os import getenv
 
-config_dir_path = Path("config")
+if getenv("MARIADB_DRIVE_DUMP_CONFIG_DIR") is not None:
+    config_dir_path = Path(getenv("MARIADB_DRIVE_DUMP_CONFIG_DIR"))
+else:
+    config_dir_path = Path("config")
 
 credentials_path = config_dir_path / "credentials.json"
 config_path = config_dir_path / "config.ini"
