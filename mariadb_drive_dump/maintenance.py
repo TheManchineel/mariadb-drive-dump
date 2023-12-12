@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from pytz import UTC
 from dateutil import parser
 
-from .google_drive import list_directory
+from .google_drive import list_directory, delete_file
 from .config import target_directory_id, retention_days
 from .utils import get_logger
 
@@ -28,7 +28,7 @@ def spring_clean() -> int:
             UTC.localize(datetime.now() - timedelta(days=retention_days))
         ):
             get_logger().info(f"Deleting old file \"{file.metadata['title']}\"")
-            file.Delete()
+            delete_file(file)
             deleted_count += 1
 
     return deleted_count

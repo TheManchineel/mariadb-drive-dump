@@ -2,7 +2,7 @@ from datetime import datetime
 from threading import Thread
 
 from .config import target_directory_id, encryption_key
-from .google_drive import resolve_file, upload_file
+from .google_drive import upload_file
 from .dump import dump_databases
 from .crypto import encrypt_buffer
 from .gzip import compress_buffer
@@ -26,8 +26,6 @@ class DumpJob:
 
 def dump_job(timestamp) -> bool:
     try:
-        target_dir = resolve_file(target_directory_id)
-
         buffer = compress_buffer(dump_databases())
 
         if encryption_key is not None:
@@ -36,7 +34,7 @@ def dump_job(timestamp) -> bool:
         else:
             filename = f"dump_{timestamp}.sql.gz"
 
-        id = upload_file(target_dir, filename, buffer).metadata["id"]
+        id = upload_file(target_directory_id, filename, buffer).metadata["id"]
         get_logger(__name__).info(
             f"Dump {filename} successfully uploaded to Google Drive (https://drive.google.com/file/d/{id}/view)"
         )
