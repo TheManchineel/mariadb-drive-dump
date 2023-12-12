@@ -21,6 +21,7 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: Get current date
+      run: |
         echo "NOW::$(date '+%Y-%m-%dT%H_%M_%SZ')" >> $GITHUB_ENV
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag manchineel/mariadb_drive_dump:${NOW}
