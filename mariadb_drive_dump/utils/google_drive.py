@@ -64,7 +64,9 @@ def is_directory(file: str | GoogleDriveFile) -> bool:
 
 
 def list_directory(
-    directory: str | GoogleDriveFile, latest_first: bool = False
+    directory: str | GoogleDriveFile,
+    latest_first: bool = False,
+    oldest_first: bool = False,
 ) -> GoogleDriveFileList:
     drive = get_google_drive()
     directory: GoogleDriveFile = resolve_file(directory)
@@ -74,6 +76,8 @@ def list_directory(
     }
     if latest_first:
         criteria["orderBy"] = "createdDate desc"
+    if oldest_first:
+        criteria["orderBy"] = "createdDate asc"
     if is_directory(directory):
         return drive.ListFile(criteria).GetList()
     else:
