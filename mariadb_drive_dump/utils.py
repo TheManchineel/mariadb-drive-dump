@@ -15,7 +15,7 @@ def get_config_dir_path() -> Path:
 loggers = {}
 
 
-def get_logger(name, level=logging.INFO) -> logging.Logger:
+def get_logger(name: str, level=logging.INFO) -> logging.Logger:
     if loggers.get(name):
         return loggers.get(name)
     else:

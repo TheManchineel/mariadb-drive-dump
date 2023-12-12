@@ -13,10 +13,10 @@ def encrypt_buffer(buffer: BytesIO) -> BytesIO:
         f = Fernet(encryption_key)
         return BytesIO(f.encrypt(buffer.getvalue()))
     except InvalidKey:
-        get_logger().error("Invalid key. Please check your config file.")
+        get_logger(__name__).error("Invalid key. Please check your config file.")
         exit(1)
     except Exception as e:
-        get_logger().error(e)
+        get_logger(__name__).error(e)
         exit(1)
 
 
@@ -25,8 +25,8 @@ def decrypt_buffer(buffer: BytesIO) -> BytesIO:
         f = Fernet(encryption_key)
         return BytesIO(f.decrypt(buffer.getvalue()))
     except InvalidKey:
-        get_logger().error("Invalid key. Please check your config file.")
+        get_logger(__name__).error("Invalid key. Please check your config file.")
         exit(1)
     except Exception as e:
-        get_logger().error(e)
+        get_logger(__name__).error(e)
         exit(1)
