@@ -6,7 +6,7 @@ if check_and_fix_config():
     logger.warning("Please edit the config file and restart the program")
     exit(1)
 
-from pycron import has_been
+from pycron import is_now, has_been
 from datetime import datetime, timedelta
 from time import sleep
 from signal import signal, SIGINT, SIGTERM
@@ -38,9 +38,6 @@ signal(SIGINT, on_signal)
 signal(SIGTERM, on_signal)
 
 
-ONE_MINUTE = timedelta(minutes=1)
-
-
 def launch_job():
     global job
     job = DumpJob()
@@ -50,16 +47,22 @@ def launch_job():
 def main():
     last_backup_time: datetime = time_of_last_backup()
     while True:
-        if has_been(crontab, last_backup_time):
+        if (
+            datetime.now().replace(microsecond=0, second=0)
+            != last_backup_time.replace(microsecond=0, second=0)
+            and has_been(crontab, last_backup_time)
+            and not (
+                datetime.now().replace(microsecond=0, second=0)
+                == last_backup_time.replace(microsecond=0, second=0)
+                + timedelta(minutes=1)
+                and not is_now(crontab)
+            )
+        ):
             last_backup_time = datetime.now()
             launch_job()
             spring_clean()
         else:
-            now = datetime.now()
-            seconds_until_next_minute = (
-                (now + ONE_MINUTE).replace(microsecond=0, second=1) - now
-            ).seconds
-            sleep(seconds_until_next_minute)
+            sleep(1)
             continue
 
 
