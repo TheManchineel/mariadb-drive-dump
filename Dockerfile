@@ -4,7 +4,7 @@ ENV PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
     PYTHONUNBUFFERED=1
 
-RUN apt update && apt install -y gcc libffi-dev g++
+RUN apt update && apt install -y mariadb-client
 WORKDIR /app
 
 FROM base as builder
@@ -14,11 +14,11 @@ ENV PIP_DEFAULT_TIMEOUT=100 \
     PIP_NO_CACHE_DIR=1 \
     POETRY_VERSION=1.1.14
 
-RUN pip install "poetry==$POETRY_VERSION"
+RUN apt install -y gcc libffi-dev g++ && pip install "poetry==$POETRY_VERSION"
 
 COPY . .
-RUN poetry install --no-dev --no-root
-RUN poetry build
+
+RUN poetry install --no-dev --no-root && poetry build
 
 FROM base as final
 
