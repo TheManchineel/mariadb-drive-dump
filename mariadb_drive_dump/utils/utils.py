@@ -1,6 +1,8 @@
 import logging
-from os import environ
+from os import environ, makedirs
 from contextlib import contextmanager
+from pathlib import Path
+from shutil import copy
 
 
 def get_logger(name, level=logging.INFO) -> logging.Logger:
@@ -31,3 +33,15 @@ def human_readable_size(size: int | float, decimal_places: int = 2) -> str:
             break
         size /= 1024.0
     return f"{size:.{decimal_places}f} {unit}"
+
+
+def check_and_fix_config() -> bool:
+    config_path = Path(__file__).parents[2] / "config" / "config.ini"
+    if not config_path.exists():
+        config_example_path = (
+            Path(__file__).parents[2] / "config_example" / "config.ini"
+        )
+        makedirs(config_path.parent, exist_ok=True)
+        copy(config_example_path, config_path)
+        return True
+    return False
