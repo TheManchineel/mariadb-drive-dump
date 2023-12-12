@@ -47,15 +47,14 @@ def launch_job():
 def main():
     last_backup_time: datetime = time_of_last_backup()
     while True:
-        if (
-            datetime.now().replace(microsecond=0, second=0)
-            != last_backup_time.replace(microsecond=0, second=0)
-            and has_been(crontab, last_backup_time)
-            and not (
-                datetime.now().replace(microsecond=0, second=0)
-                == last_backup_time.replace(microsecond=0, second=0)
-                + timedelta(minutes=1)
-                and not is_now(crontab)
+        if last_backup_time.replace(microsecond=0, second=0) != datetime.now().replace(
+            microsecond=0, second=0
+        ) and (
+            is_now(crontab)
+            or has_been(
+                crontab,
+                last_backup_time.replace(microsecond=0, second=0)
+                + timedelta(minutes=1),
             )
         ):
             last_backup_time = datetime.now()
