@@ -1,8 +1,15 @@
 import logging
-from os import environ, makedirs
+from os import environ, makedirs, getenv
 from contextlib import contextmanager
 from pathlib import Path
 from shutil import copy
+
+
+def get_config_dir_path() -> Path:
+    if getenv("MARIADB_DRIVE_DUMP_CONFIG_DIR") is not None:
+        return Path(getenv("MARIADB_DRIVE_DUMP_CONFIG_DIR"))
+    else:
+        return Path("config")
 
 
 def get_logger(name, level=logging.INFO) -> logging.Logger:
@@ -36,7 +43,7 @@ def human_readable_size(size: int | float, decimal_places: int = 2) -> str:
 
 
 def check_and_fix_config() -> bool:
-    config_path = Path("config") / "config.ini"
+    config_path = get_config_dir_path() / "config.ini"
     if not config_path.exists():
         config_example_path = Path(__file__).parent / "config" / "config.ini"
         makedirs(config_path.parent, exist_ok=True)
