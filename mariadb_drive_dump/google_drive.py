@@ -5,7 +5,8 @@ from pydrive2.drive import GoogleDrive, GoogleDriveFile, GoogleDriveFileList
 from oauth2client.service_account import ServiceAccountCredentials
 from io import BytesIO
 
-from utils.config import credentials_path
+from .config import credentials_path
+from .utils import get_logger
 
 OAUTH_SCOPE = [
     "https://www.googleapis.com/auth/drive",
@@ -14,7 +15,7 @@ OAUTH_SCOPE = [
 
 FOLDER_MIME_TYPE = "application/vnd.google-apps.folder"
 
-drive = None
+drive: GoogleDrive = None
 
 
 class FakeEncodableBytesIO(BytesIO):
@@ -37,6 +38,7 @@ def get_google_drive() -> GoogleDrive:
             credentials_path, OAUTH_SCOPE
         )
         drive = GoogleDrive(gauth)
+        get_logger(__name__).info("Successfully connected to Google Drive!")
     return drive
 
 

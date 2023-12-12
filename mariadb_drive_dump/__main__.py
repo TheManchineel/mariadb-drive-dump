@@ -1,4 +1,4 @@
-from utils.utils import check_and_fix_config, get_logger
+from .utils import check_and_fix_config, get_logger
 
 if check_and_fix_config():
     logger = get_logger(__name__)
@@ -11,9 +11,9 @@ from datetime import datetime, timedelta
 from time import sleep
 from signal import signal, SIGINT, SIGTERM
 
-from utils.job import DumpJob
-from utils.config import crontab
-from utils.maintenance import time_of_last_backup, spring_clean
+from .job import DumpJob
+from .config import crontab
+from .maintenance import time_of_last_backup, spring_clean
 
 
 job: DumpJob = None
